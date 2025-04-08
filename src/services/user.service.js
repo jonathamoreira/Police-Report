@@ -6,4 +6,15 @@ const findAllService = () => User.find();
 
 const findByIdService = (id) => User.findById(id);
 
-export default { createService, findAllService, findByIdService };
+const updateService = (id, body) =>
+  User.findByIdAndUpdate(id, body, { new: true });
+
+const deleteService = (id) => User.findByIdAndDelete(id);
+
+export default {
+  createService,
+  findAllService,
+  findByIdService,
+  updateService,
+  deleteService,
+};
