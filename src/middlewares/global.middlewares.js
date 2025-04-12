@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import userService from "../services/user.service.js";
+import crashService from "../services/crash.service.js";
 
 export const ValidId = (req, res, next) => {
   try {
@@ -13,14 +13,14 @@ export const ValidId = (req, res, next) => {
   }
 };
 
-export const ValidUser = async (req, res, next) => {
+export const ValidCrash = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const user = await userService.findByIdService(id);
-    if (!user) {
-      return res.status(400).send({ message: "User not found" });
+    const crash = await crashService.findByIdService(id);
+    if (!crash) {
+      return res.status(400).send({ message: "Crash not found" });
     }
-    req.user = user;
+    req.crash = crash;
     next();
   } catch (err) {
     res.status(500).send({ message: err });
