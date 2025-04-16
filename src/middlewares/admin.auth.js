@@ -1,25 +1,28 @@
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+
 export const adminAuth = (req, res, next) => {
-  // Verifique se o token foi fornecido
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    return res.status(500).json({ error: "Erro interno do servidor." });
+  }
+
   const authHeader = req.headers.authorization;
   if (!authHeader)
     return res.status(401).json({ error: "Token não fornecido." });
 
-  // Extraia o token e verifique
+  // Extraímos o token do header
   const token = authHeader.replace("Bearer ", "");
 
   try {
     const decoded = jwt.verify(token, secret);
     req.userId = decoded.id;
-
-    // Aqui você pode fazer uma verificação adicional para garantir que o usuário tenha o papel de "admin"
-    // Supondo que o campo "role" esteja presente no token (você deve definir isso ao gerar o token)
+    // Verificando se o usuário tem o papel de "admin"
     if (decoded.role !== "admin") {
-      return res
-        .status(403)
-        .json({
-          error:
-            "Acesso negado. Apenas administradores podem acessar esta rota.",
-        });
+      return res.status(403).json({
+        error: "Acesso negado. Apenas administradores podem acessar esta rota.",
+      });
     }
 
     next();

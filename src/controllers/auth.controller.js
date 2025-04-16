@@ -1,6 +1,8 @@
 import Admin from "../models/Admin.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const login = async (req, res) => {
   try {
@@ -19,9 +21,15 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { id: admin._id, role: "admin" }, // Verifique se `role` é incluído no payload
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
+    // const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
+    //   expiresIn: "1d",
+    // });
     return res.status(200).json({ token });
   } catch (error) {
     console.error("Erro no login", error);

@@ -13,19 +13,13 @@ const create = async (req, res) => {
     // Cria o admin
     const admin = await adminService.create({ name, matricula, password });
 
-    // Gerar o token JWT
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
-      expiresIn: 86400, // 24 horas
-    });
-
-    // Retornar o admin com o token
+    // Retornar o admin
     res.status(201).json({
       admin: {
         id: admin._id,
         name: admin.name,
         matricula: admin.matricula,
       },
-      token: token, // Enviar o token gerado
     });
   } catch (error) {
     if (error.code === 11000) {
@@ -41,6 +35,16 @@ const findAll = async (req, res) => {
     res.status(200).json(admins);
   } catch (error) {
     res.status(500).json({ message: "Erro ao buscar Admins" });
+  }
+};
+
+// No controller de admin, a função para listar todos os usuários
+const findAllUsers = async (req, res) => {
+  try {
+    const users = await accountUserService.findAll(); // Aqui busca todos os usuários
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao buscar usuários" });
   }
 };
 
@@ -85,6 +89,7 @@ const remove = async (req, res) => {
 export default {
   create,
   findAll,
+  findAllUsers,
   findById,
   update,
   remove,

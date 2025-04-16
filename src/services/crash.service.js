@@ -4,6 +4,8 @@ const createService = (body) => Crash.create(body);
 
 const findAllService = () => Crash.find();
 
+const findByUserIdService = (userId) => Crash.find({ user: userId });
+
 const findByIdService = (id) => Crash.findById(id);
 
 const updateService = (id, body) =>
@@ -17,4 +19,5 @@ export default {
   findByIdService,
   updateService,
   deleteService,
+  findByUserIdService,
 };

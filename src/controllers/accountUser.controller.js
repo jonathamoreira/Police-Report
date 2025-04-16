@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import accountUserService from "../services/accountUser.service.js";
+// import dotenv from "dotenv";
+// dotenv.config();
 
 const create = async (req, res) => {
   try {
@@ -15,8 +17,6 @@ const create = async (req, res) => {
   }
 };
 
-const secret = process.env.JWT_SECRET;
-
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -28,21 +28,33 @@ const login = async (req, res) => {
     }
 
     // Gerar o token
-    const token = jwt.sign({ id: user._id }, secret, { expiresIn: 86400 });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: 86400,
+    }); // 24 horas
 
     // Retorna os dados do usuário e o token
     res.json({
       message: "Login bem-sucedido",
-      token, // Retornando o token
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         createdAt: user.createdAt,
       },
+      token, // Retornando o token
     });
   } catch (err) {
     res.status(401).json({ error: err.message });
+  }
+};
+
+const findAllUsers = async (req, res) => {
+  try {
+    const users = await accountUserService.findAll();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -55,4 +67,4 @@ const getProfile = async (req, res) => {
   }
 };
 
-export default { create, login, getProfile };
+export default { create, login, getProfile, findAllUsers };

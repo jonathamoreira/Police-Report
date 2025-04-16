@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
-import AccountUser from "../models/accountUser.js";
+import AccountUser from "../models/AccountUser.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -18,15 +18,10 @@ const login = async (email, password) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new Error("Senha incorreta.");
 
-  console.log("secret", secret);
-
-  const token = jwt.sign({ id: user._id }, secret, { expiresIn: "1d" });
-
-  return {
-    id: user._id,
-    name: user.name,
-    token,
-  };
+  return user;
+};
+const findAll = async () => {
+  return await AccountUser.find().select("-password"); // evita retornar a senha
 };
 
 const getProfile = async (id) => {
@@ -39,4 +34,5 @@ export default {
   create,
   login,
   getProfile,
+  findAll,
 };

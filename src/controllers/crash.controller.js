@@ -1,4 +1,5 @@
 import e from "express";
+import { nanoid } from "nanoid";
 import crashService from "../services/crash.service.js";
 
 const create = async (req, res) => {
@@ -10,11 +11,19 @@ const create = async (req, res) => {
         .status(400)
         .send({ message: "Submit all fields for registration" });
     }
+    const userId = req.userId;
 
-    const userId = req.userId; // pegando ID do usuário autenticado
+    const now = new Date();
+    const datePart = now
+      .toISOString()
+      .replace(/[-T:.Z]/g, "")
+      .slice(0, 14);
+    const protocol = `${datePart}${nanoid(7).toUpperCase()}`;
+
     const crash = await crashService.createService({
       ...req.body,
       user: userId,
+      protocol,
     });
 
     if (!crash) {
@@ -33,6 +42,7 @@ const create = async (req, res) => {
         plate2,
         address,
         description,
+        protocol: protocol,
         createdAt: crash.createdAt,
       },
     });
@@ -51,6 +61,23 @@ const findById = async (req, res) => {
     }
 
     res.send(crash);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const findUserCrashes = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const crashes = await crashService.findByUserIdService(userId);
+
+    if (!crashes.length) {
+      return res
+        .status(404)
+        .send({ message: "No crashes found for this user" });
+    }
+
+    res.status(200).send(crashes);
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -136,6 +163,7 @@ const crashController = {
   findAll,
   deleteCrash,
   update,
+  findUserCrashes,
 };
 
 export default crashController;
