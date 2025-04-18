@@ -53,13 +53,10 @@ const create = async (req, res) => {
 
 const findById = async (req, res) => {
   try {
-    const crash = req.user;
-
-    // Garante que só veja se for o dono
-    if (crash.user.toString() !== req.user.id) {
-      return res.status(403).send({ message: "Access denied" });
+    const crash = await crashService.findByIdService(req.params.id);
+    if (!crash) {
+      return res.status(404).send({ message: "Crash not found" });
     }
-
     res.send(crash);
   } catch (err) {
     res.status(500).send({ message: err.message });

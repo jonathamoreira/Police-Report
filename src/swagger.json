@@ -7,10 +7,726 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:4000",
+      "description": "Servidor local"
     }
   ],
-  "paths": {},
-  "components": {},
-  "tags": {}
+  "paths": {
+    "/admin": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "create new Admin",
+        "requestBody": {
+          "description": "Admin object that needs to be added to the store",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "matricula": {
+                    "type": "number"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "matricula", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "matricula": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Admin already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get all admins",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of admins",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Admin"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+
+    "/admin/login": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Login",
+        "requestBody": {
+          "description": "Admin login credentials",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "matricula": {
+                    "type": "number"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["matricula", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Matricula and password are required"
+          },
+          "401": {
+            "description": "Invalid username or password"
+          },
+          "500": {
+            "description": "Erro no login do admin"
+          }
+        }
+      }
+    },
+    "/admin/{id}": {
+      "get": {
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get admin by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the admin to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Admin"
+              }
+            }
+          },
+          "404": {
+            "description": "Admin not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Update admin by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the admin to update",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Admin object that needs to be updated",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Admin update successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admin"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Admin not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Admin"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Delete admin by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the admin to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Admin delete successfully"
+          },
+          "404": {
+            "description": "Admin not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Register new user",
+        "requestBody": {
+          "description": "User object that needs to be registered",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountUser"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User login",
+        "requestBody": {
+          "description": "User login credentials",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid username or password"
+          }
+        }
+      }
+    },
+    "/user/users": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Admin Get all users",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountUser"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/crash": {
+      "post": {
+        "tags": ["Crash"],
+        "summary": "User register new crash report",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "description": "This endpoint allows a user to register a new crash report.",
+        "requestBody": {
+          "description": "Crash report object that needs to be added to the store",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "number"
+                  },
+                  "plate1": {
+                    "type": "string"
+                  },
+                  "plate2": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "phone",
+                  "plate1",
+                  "address",
+                  "description"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Crash registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "number"
+                    },
+                    "plate1": {
+                      "type": "string"
+                    },
+                    "plate2": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "protocol": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/crash/mine": {
+      "get": {
+        "tags": ["Crash"],
+        "summary": "Get all crash reports by user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of crash reports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Crash"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User not authorized"
+          },
+          "404": {
+            "description": "No crash reports found for this user"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/crash/crashes": {
+      "get": {
+        "tags": ["Crash"],
+        "summary": "Admin Get all crash reports",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of crash reports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Crash"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User not authorized"
+          },
+          "404": {
+            "description": "No crash reports found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/crash/crashes/{id}": {
+      "get": {
+        "tags": ["Crash"],
+        "summary": "Admin Get crash report by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the crash report to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Crash"
+              }
+            }
+          },
+          "404": {
+            "description": "Crash report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Crash"],
+        "summary": "Admin Update crash report by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the crash report to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "$ref": "#/components/schemas/Crash"
+              }
+            }
+          },
+          "404": {
+            "description": "Crash report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Crash"],
+        "summary": "Admin Delete crash report by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the crash report to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Crash report deleted successfully"
+          },
+          "404": {
+            "description": "Crash report not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "matricula": {
+            "type": "number"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "matricula", "password"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "Crash": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "number"
+          },
+          "plate1": {
+            "type": "string"
+          },
+          "plate2": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "protocol": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "name",
+          "phone",
+          "plate1",
+          "address",
+          "description",
+          "protocol"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [{ "name": "Admin" }, { "name": "User" }, { "name": "Crash" }]
 }

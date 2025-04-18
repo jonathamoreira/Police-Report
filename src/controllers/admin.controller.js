@@ -15,6 +15,7 @@ const create = async (req, res) => {
 
     // Retornar o admin
     res.status(201).json({
+      message: "Admin created successfully",
       admin: {
         id: admin._id,
         name: admin.name,
@@ -34,14 +35,14 @@ const findAll = async (req, res) => {
     const admins = await adminService.findAll();
     res.status(200).json(admins);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao buscar Admins" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 // No controller de admin, a função para listar todos os usuários
 const findAllUsers = async (req, res) => {
   try {
-    const users = await accountUserService.findAll(); // Aqui busca todos os usuários
+    const users = await userService.findAll(); // Aqui busca todos os usuários
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Erro ao buscar usuários" });
@@ -68,7 +69,7 @@ const update = async (req, res) => {
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
-    res.status(200).json(admin);
+    res.status(200).json({ message: "Admin updated successfully", admin });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }

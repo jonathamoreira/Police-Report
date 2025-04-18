@@ -31,7 +31,7 @@ const CrahsSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "AccountUser",
+      ref: "User",
       required: true,
     },
     protocol: {
@@ -40,7 +40,7 @@ const CrahsSchema = new mongoose.Schema(
       unique: true,
     },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: true, updatedAt: false } }
 );
 
 const Crash = mongoose.model("Crash", CrahsSchema);

@@ -11,11 +11,17 @@ router.post("/", verifyTokenUser, crashController.create);
 // Usuário vê a própria ocorrência
 router.get("/mine", verifyTokenUser, crashController.findUserCrashes);
 
-// Ver todos os registros de ocorrências
+// Admin vê todos os registros de ocorrências
 router.get("/crashes", adminAuth, crashController.findAll);
 
 // Ver uma ocorrência específica
-router.get("/crashes/:id", ValidId, ValidCrash, crashController.findById);
+router.get(
+  "/crashes/:id",
+  adminAuth,
+  ValidId,
+  ValidCrash,
+  crashController.findById
+);
 
 // Editar ocorrência
 router.patch(
