@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://apicrash.onrender.com/",
+      "url": "https://apicrash.onrender.com/doc/",
       "description": "Render Server"
     },
     {
