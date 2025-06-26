@@ -3,9 +3,13 @@
   "info": {
     "title": "API de Relatório de Ocorrências",
     "version": "1.0.0",
-    "description": "API para gerenciamento de usuários, administradores e relatórios de ocorrências."
+    "description": "API para geração de protocolos e gerenciamento de usuários, administradores e relatórios de ocorrências."
   },
   "servers": [
+    {
+      "url": "https://apicrash.onrender.com/",
+      "description": "Render Server"
+    },
     {
       "url": "http://localhost:4000",
       "description": "Servidor local"
@@ -22,20 +26,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "matricula": {
-                    "type": "number"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                },
-                "required": ["name", "matricula", "password"]
-              }
+                "$ref": "#/components/schemas/Admin"
+              },
+              "example": {
+                "name": "Admin",
+                "matricula": 123456,
+                "password": "admin123"
+              },
+              "required": ["name", "matricula", "password"]
             }
           }
         },
@@ -108,17 +106,13 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "matricula": {
-                    "type": "number"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
-                },
-                "required": ["matricula", "password"]
-              }
+                "$ref": "#/components/schemas/Admin"
+              },
+              "example": {
+                "matricula": 123456,
+                "password": "admin123"
+              },
+              "required": ["matricula", "password"]
             }
           }
         },
@@ -133,7 +127,8 @@
                     "token": {
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": ["token"]
                 }
               }
             }
@@ -166,7 +161,7 @@
             "required": true,
             "description": "ID of the admin to retrieve",
             "schema": {
-              "type": "string"
+              "type": "object"
             }
           }
         ],
@@ -175,7 +170,12 @@
             "description": "",
             "content": {
               "application/json": {
-                "$ref": "#/components/schemas/Admin"
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Admin"
+                  }
+                }
               }
             }
           },
@@ -647,6 +647,14 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+
     "schemas": {
       "Admin": {
         "type": "object",
@@ -718,13 +726,6 @@
           "description",
           "protocol"
         ]
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
       }
     }
   },
