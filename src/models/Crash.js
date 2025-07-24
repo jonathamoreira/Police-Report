@@ -34,6 +34,11 @@ const CrahsSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    protocol: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );

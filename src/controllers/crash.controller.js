@@ -13,9 +13,17 @@ const create = async (req, res) => {
     }
     const userId = req.userId;
 
+    const now = new Date();
+    const datePart = now
+      .toISOString()
+      .replace(/[-T:.Z]/g, "")
+      .slice(0, 14);
+    const protocol = `${datePart}${nanoid(7).toUpperCase()}`;
+
     const crash = await crashService.createService({
       ...req.body,
       user: userId,
+      protocol,
     });
 
     if (!crash) {
