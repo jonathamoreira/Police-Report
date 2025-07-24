@@ -30,9 +30,11 @@ const login = async (req, res) => {
 
     // Gerar o token
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 86400,
-    }); // 24 horas
+    const token = jwt.sign(
+      { id: user._id, role: user.role }, // <--- inclui role aqui
+      process.env.JWT_SECRET,
+      { expiresIn: 86400 }
+    ); // 24 horas
 
     // Retorna os dados do usuário e o token
     res.json({

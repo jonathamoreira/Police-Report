@@ -19,6 +19,10 @@ const AdminSchema = new mongoose.Schema({
     trim: true,
     minlength: 6,
   },
+  role: {
+    type: String,
+    default: "admin",
+  },
 });
 // 👇 Middleware para capitalizar a primeira letra do name
 AdminSchema.pre("save", function (next) {

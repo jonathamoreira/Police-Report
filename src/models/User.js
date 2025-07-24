@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
+  role: {
+    type: String,
+    default: "user",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -37,5 +41,5 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-const User = mongoose.model("AccountUser", UserSchema);
+const User = mongoose.model("User", UserSchema);
 export default User;

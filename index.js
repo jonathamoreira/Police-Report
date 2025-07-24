@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 
 import express from "express";
+import cors from "cors";
 import connectDataBase from "./src/database/db.js";
 import crashRoute from "./src/routes/crash.route.js";
 import adminRoute from "./src/routes/admin.route.js";
@@ -11,6 +12,12 @@ dotenv.config();
 
 const port = 4000;
 const app = express();
+app.use(
+  cors({
+    origin: ["http://localhost:5173"], // ajuste para seu domínio real
+    credentials: true,
+  })
+);
 
 connectDataBase();
 app.use("/doc", swaggerRoute);
