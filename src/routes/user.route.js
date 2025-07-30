@@ -17,4 +17,13 @@ router.get("/users", adminAuth, userController.findAllUsers);
 // Perfil do usuário autenticado
 router.get("/profile", verifyTokenUser, userController.getProfile);
 
+// Ver um usuário especifico
+router.get("/users/:id", adminAuth, userController.findById);
+
+// Excluir um usuário (apenas para admins)
+router.delete("/users/:id", adminAuth, userController.deleteUser);
+
+// Atualizar um usuário (apenas para admins)
+router.patch("/users/:id", adminAuth, userController.updateUser);
+
 export default router;

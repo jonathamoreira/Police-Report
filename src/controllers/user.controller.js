@@ -70,4 +70,65 @@ const getProfile = async (req, res) => {
   }
 };
 
-export default { create, login, getProfile, findAllUsers };
+const findById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userService.findByIdService(id);
+
+    if (!user) {
+      return res.status(404).send({ message: "Usuário não encontrado." });
+    }
+
+    res.status(200).send(user);
+  } catch (error) {
+    console.error("Erro ao buscar usuário por ID:", error);
+    res.status(500).send({ message: "Erro interno do servidor." });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userService.deleteService(id);
+    if (!user) {
+      return res.status(404).send({ message: "Usuário não encontrado." });
+    }
+    res.status(200).json({ message: "Usuário excluído com sucesso." });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao excluir usuário." });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, password } = req.body;
+
+    // Você pode adicionar mais validações aqui para outros campos se necessário
+    const user = await userService.updateService(id, {
+      name,
+      email,
+      password,
+    });
+
+    if (!user) {
+      return res.status(404).send({ message: "Usuário não encontrado." });
+    }
+
+    res.status(200).json({ message: "Usuário atualizado com sucesso.", user });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Erro ao atualizar usuário.", error: error.message });
+  }
+};
+
+export default {
+  create,
+  login,
+  getProfile,
+  findById,
+  findAllUsers,
+  deleteUser,
+  updateUser,
+};

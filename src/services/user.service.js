@@ -30,9 +30,26 @@ const getProfile = async (id) => {
   return user;
 };
 
+const findByIdService = async (id) => {
+  return await User.findById(id).select("-password");
+};
+
+const deleteService = async (id) => {
+  return await User.findByIdAndDelete(id);
+};
+
+const updateService = async (id, updatedData) => {
+  return await User.findByIdAndUpdate(id, updatedData, { new: true }).select(
+    "-password"
+  );
+};
+
 export default {
   create,
   login,
   getProfile,
   findAll,
+  findByIdService,
+  deleteService,
+  updateService,
 };
