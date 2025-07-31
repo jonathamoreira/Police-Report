@@ -123,10 +123,21 @@ const updateUser = async (req, res) => {
   }
 };
 
+const countUsers = async (req, res) => {
+  try {
+    const totalUsers = await userService.countDocumentsService();
+    res.status(200).send({ total: totalUsers });
+  } catch (err) {
+    console.error("Erro ao contar usuários:", err);
+    res.status(500).send({ message: "Erro interno do servidor." });
+  }
+};
+
 export default {
   create,
   login,
   getProfile,
+  countUsers,
   findById,
   findAllUsers,
   deleteUser,

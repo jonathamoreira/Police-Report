@@ -14,6 +14,10 @@ router.get("/mine", verifyTokenUser, crashController.findUserCrashes);
 // Admin vê todos os registros de ocorrências
 router.get("/crashes", adminAuth, crashController.findAll);
 
+router.get("/count", adminAuth, crashController.countCrashes); // Contar ocorrências
+
+router.get("/last", adminAuth, crashController.findLastCrash);
+
 // Ver uma ocorrência específica
 router.get(
   "/crashes/:id",
@@ -40,4 +44,5 @@ router.delete(
   ValidCrash,
   crashController.deleteCrash
 );
+
 export default router;

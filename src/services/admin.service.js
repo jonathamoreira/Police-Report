@@ -22,10 +22,13 @@ const update = async (id, body) => {
 };
 const remove = (id) => Admin.findByIdAndDelete(id);
 
+const countDocumentsService = () => Admin.countDocuments();
+
 export default {
   create,
   findAll,
   findById,
   update,
   remove,
+  countDocumentsService,
 };

@@ -9,6 +9,7 @@ const router = Router();
 router.post("/", adminController.create); // Criar um novo admin
 router.get("/", adminAuth, adminController.findAll); // Listar todos os admins
 router.post("/login", authController.login); // Login de um admin
+router.get("/count", adminAuth, adminController.countAdmins); // Contar admins
 router.get("/:id", adminAuth, adminController.findById); // Ver um admin específico
 router.put("/:id", adminAuth, adminController.update); // Atualizar um admin específico
 router.delete("/:id", adminAuth, adminController.remove); // Deletar um admin

@@ -153,6 +153,31 @@ const update = async (req, res) => {
   }
 };
 
+const countCrashes = async (req, res) => {
+  try {
+    const totalOcorrencias = await crashService.countDocumentsService();
+    res.status(200).send({ total: totalOcorrencias });
+  } catch (err) {
+    console.error("Erro ao contar ocorrências:", err);
+    res.status(500).send({ message: "Erro interno do servidor." });
+  }
+};
+
+const findLastCrash = async (req, res) => {
+  try {
+    const lastCrash = await crashService.findLastCrashService();
+    if (!lastCrash) {
+      return res
+        .status(404)
+        .send({ message: "Nenhuma ocorrência encontrada." });
+    }
+    res.status(200).send(lastCrash);
+  } catch (err) {
+    console.error("Erro ao buscar a última ocorrência:", err);
+    res.status(500).send({ message: "Erro interno do servidor." });
+  }
+};
+
 const crashController = {
   create,
   findById,
@@ -160,6 +185,8 @@ const crashController = {
   deleteCrash,
   update,
   findUserCrashes,
+  countCrashes,
+  findLastCrash,
 };
 
 export default crashController;

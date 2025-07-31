@@ -17,6 +17,9 @@ router.get("/users", adminAuth, userController.findAllUsers);
 // Perfil do usuário autenticado
 router.get("/profile", verifyTokenUser, userController.getProfile);
 
+// contar usuários (apenas para admins)
+router.get("/users/count", adminAuth, userController.countUsers);
+
 // Ver um usuário especifico
 router.get("/users/:id", adminAuth, userController.findById);
 

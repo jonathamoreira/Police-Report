@@ -44,10 +44,13 @@ const updateService = async (id, updatedData) => {
   );
 };
 
+const countDocumentsService = () => User.countDocuments();
+
 export default {
   create,
   login,
   getProfile,
+  countDocumentsService,
   findAll,
   findByIdService,
   deleteService,

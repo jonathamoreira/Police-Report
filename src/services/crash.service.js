@@ -13,6 +13,10 @@ const updateService = (id, body) =>
 
 const deleteService = (id) => Crash.findByIdAndDelete(id);
 
+const countDocumentsService = () => Crash.countDocuments();
+
+const findLastCrashService = () => Crash.findOne().sort({ createdAt: -1 });
+
 export default {
   createService,
   findAllService,
@@ -20,4 +24,6 @@ export default {
   updateService,
   deleteService,
   findByUserIdService,
+  countDocumentsService,
+  findLastCrashService,
 };

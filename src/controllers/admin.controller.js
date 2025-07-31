@@ -87,6 +87,17 @@ const remove = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+const countAdmins = async (req, res) => {
+  try {
+    const totalAdmins = await adminService.countDocumentsService();
+    res.status(200).send({ total: totalAdmins });
+  } catch (err) {
+    console.error("Erro ao contar admins:", err);
+    res.status(500).send({ message: "Erro interno do servidor." });
+  }
+};
+
 export default {
   create,
   findAll,
@@ -94,4 +105,5 @@ export default {
   findById,
   update,
   remove,
+  countAdmins,
 };
