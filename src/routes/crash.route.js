@@ -12,15 +12,31 @@ router.post("/", verifyTokenUser, crashController.create);
 router.get("/mine", verifyTokenUser, crashController.findUserCrashes);
 
 // Admin vê todos os registros de ocorrências
-router.get("/crashes", checkRole("admin"), crashController.findAll);
+router.get(
+  "/crashes",
+  verifyTokenUser,
+  checkRole("admin"),
+  crashController.findAll
+);
 
-router.get("/count", checkRole("admin"), crashController.countCrashes); // Contar ocorrências
+router.get(
+  "/count",
+  verifyTokenUser,
+  checkRole("admin"),
+  crashController.countCrashes
+); // Contar ocorrências
 
-router.get("/last", checkRole("admin"), crashController.findLastCrash);
+router.get(
+  "/last",
+  verifyTokenUser,
+  checkRole("admin"),
+  crashController.findLastCrash
+);
 
 // Ver uma ocorrência específica
 router.get(
   "/crashes/:id",
+  verifyTokenUser,
   checkRole("admin"),
   ValidId,
   ValidCrash,
@@ -30,6 +46,7 @@ router.get(
 // Editar ocorrência
 router.patch(
   "/crashes/:id",
+  verifyTokenUser,
   checkRole("admin"),
   ValidId,
   ValidCrash,
@@ -39,6 +56,7 @@ router.patch(
 // Deletar ocorrência
 router.delete(
   "/crashes/:id",
+  verifyTokenUser,
   checkRole("admin"),
   ValidId,
   ValidCrash,

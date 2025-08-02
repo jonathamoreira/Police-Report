@@ -12,21 +12,46 @@ router.post("/register", userController.create);
 router.post("/login", userController.login);
 
 // admin vê todos os usuários
-router.get("/users", checkRole("admin"), userController.findAllUsers);
+router.get(
+  "/users",
+  verifyTokenUser,
+  checkRole("admin"),
+  userController.findAllUsers
+);
 
 // Perfil do usuário autenticado
 router.get("/profile", verifyTokenUser, userController.getProfile);
 
 // contar usuários (apenas para admins)
-router.get("/users/count", checkRole("admin"), userController.countUsers);
+router.get(
+  "/users/count",
+  verifyTokenUser,
+  checkRole("admin"),
+  userController.countUsers
+);
 
 // Ver um usuário especifico
-router.get("/users/:id", checkRole("admin"), userController.findById);
+router.get(
+  "/users/:id",
+  verifyTokenUser,
+  checkRole("admin"),
+  userController.findById
+);
 
 // Excluir um usuário (apenas para admins)
-router.delete("/users/:id", checkRole("admin"), userController.deleteUser);
+router.delete(
+  "/users/:id",
+  verifyTokenUser,
+  checkRole("admin"),
+  userController.deleteUser
+);
 
 // Atualizar um usuário (apenas para admins)
-router.patch("/users/:id", checkRole("admin"), userController.updateUser);
+router.patch(
+  "/users/:id",
+  verifyTokenUser,
+  checkRole("admin"),
+  userController.updateUser
+);
 
 export default router;
