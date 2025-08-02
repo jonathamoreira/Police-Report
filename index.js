@@ -10,7 +10,7 @@ import swaggerRoute from "./src/routes/swagger.route.cjs";
 
 dotenv.config();
 
-const port = 4000;
+const port = process.env.PORT || 4000; // Use a porta do ambiente OU a 4000 localmente
 const app = express();
 app.use(
   cors({
