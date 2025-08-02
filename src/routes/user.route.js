@@ -1,7 +1,7 @@
 import { Router } from "express";
 import userController from "../controllers/user.controller.js";
 import { verifyTokenUser } from "../middlewares/auth.middlewares.js";
-import { adminAuth } from "../middlewares/admin.auth.js";
+import { checkRole } from "../middlewares/role.middleware.js";
 
 const router = Router();
 
@@ -12,21 +12,21 @@ router.post("/register", userController.create);
 router.post("/login", userController.login);
 
 // admin vê todos os usuários
-router.get("/users", adminAuth, userController.findAllUsers);
+router.get("/users", checkRole("admin"), userController.findAllUsers);
 
 // Perfil do usuário autenticado
 router.get("/profile", verifyTokenUser, userController.getProfile);
 
 // contar usuários (apenas para admins)
-router.get("/users/count", adminAuth, userController.countUsers);
+router.get("/users/count", checkRole("admin"), userController.countUsers);
 
 // Ver um usuário especifico
-router.get("/users/:id", adminAuth, userController.findById);
+router.get("/users/:id", checkRole("admin"), userController.findById);
 
 // Excluir um usuário (apenas para admins)
-router.delete("/users/:id", adminAuth, userController.deleteUser);
+router.delete("/users/:id", checkRole("admin"), userController.deleteUser);
 
 // Atualizar um usuário (apenas para admins)
-router.patch("/users/:id", adminAuth, userController.updateUser);
+router.patch("/users/:id", checkRole("admin"), userController.updateUser);
 
 export default router;
