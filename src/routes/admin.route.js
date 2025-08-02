@@ -6,7 +6,7 @@ import { adminAuth } from "../middlewares/admin.auth.js";
 const router = Router();
 
 // Admin management
-router.post("/", adminAuth, adminController.create); // Criar um novo admin ///BLOQUEADO PARA TESTES
+router.post("/", adminController.create); // Criar um novo admin
 router.get("/", adminAuth, adminController.findAll); // Listar todos os admins
 router.post("/login", authController.login); // Login de um admin
 router.get("/count", adminAuth, adminController.countAdmins); // Contar admins
