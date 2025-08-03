@@ -13,7 +13,9 @@ const login = async (req, res) => {
         .status(400)
         .json({ message: "Matricula and password are required" });
     }
-    const admin = await Admin.findOne({ matricula }).select("+password +name");
+    const admin = await Admin.findOne({ matricula }).select(
+      "+password +name +role"
+    );
     if (!admin) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -22,7 +24,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = jwt.sign(
-      { id: admin._id, role: "admin" }, // Verifique se `role` é incluído no payload
+      { id: admin._id, role: admin.role }, // Verifique se `role` é incluído no payload
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -30,7 +32,7 @@ const login = async (req, res) => {
     // const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
     //   expiresIn: "1d",
     // });
-    return res.status(200).json({ token, role: "admin", name: admin.name });
+    return res.status(200).json({ token, role: admin.role, name: admin.name });
   } catch (error) {
     console.error("Erro no login", error);
     return res.status(500).json({ message: "Erro no login do admin" });
