@@ -14,7 +14,7 @@ const port = process.env.PORT || 4000; // Use a porta do ambiente OU a 4000 loca
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:5173"], // ajuste para seu domínio real
+    origin: ["https://amtcaucaia.onrender.com"], // ajuste para seu domínio real
     credentials: true,
   })
 );
