@@ -28,6 +28,13 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  // VERIFICAÇÃO DE E-MAIL
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: String,
+  verificationTokenExpires: Date,
 });
 
 UserSchema.pre("save", async function (next) {

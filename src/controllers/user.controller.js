@@ -3,6 +3,18 @@ import userService from "../services/user.service.js";
 // import dotenv from "dotenv";
 // dotenv.config();
 
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+    await userService.verifyEmail(token);
+
+    // O back-end agora só retorna uma resposta de sucesso
+    return res.status(200).json({ message: "E-mail verificado com sucesso!" });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+};
+
 const create = async (req, res) => {
   try {
     const user = await userService.create(req.body);
@@ -14,6 +26,7 @@ const create = async (req, res) => {
       createdAt: user.createdAt,
     });
   } catch (err) {
+    console.error("Erro ao registrar usuário:", err);
     res.status(409).json({ error: err.message });
   }
 };
@@ -21,37 +34,42 @@ const create = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    // Valida o email e a senha do usuário
+    // 1. Valida o e-mail e a senha do usuário
     const user = await userService.login(email, password);
 
     if (!user) {
-      return res.status(401).json({ error: "Invalid username or password" });
+      return res.status(401).json({ error: "E-mail ou senha inválidos." });
     }
 
-    // Gerar o token
+    // 2. ADICIONA A VERIFICAÇÃO DE STATUS
+    if (!user.isVerified) {
+      return res.status(401).json({
+        error: "Por favor, verifique seu e-mail para ativar sua conta.",
+      });
+    }
 
+    // 3. Gerar o token (apenas se o e-mail for verificado)
     const token = jwt.sign(
-      { id: user._id, role: user.role }, // <--- inclui role aqui
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: 86400 }
-    ); // 24 horas
+      { expiresIn: "24h" }
+    );
 
-    // Retorna os dados do usuário e o token
+    // 4. Retorna os dados do usuário e o token
     res.json({
-      message: "User logged in successfully",
+      message: "Usuário logado com sucesso!",
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         createdAt: user.createdAt,
       },
-      token, // Retornando o token
+      token,
     });
   } catch (err) {
     res.status(401).json({ error: err.message });
   }
 };
-
 const findAllUsers = async (req, res) => {
   try {
     const users = await userService.findAll();
@@ -134,6 +152,7 @@ const countUsers = async (req, res) => {
 };
 
 export default {
+  verifyEmail,
   create,
   login,
   getProfile,

@@ -8,6 +8,9 @@ const router = Router();
 // Registro de novo usuário
 router.post("/register", userController.create);
 
+// Verificação de e-mail
+router.get("/verify-email", userController.verifyEmail);
+
 // Login do usuário
 router.post("/login", userController.login);
 
